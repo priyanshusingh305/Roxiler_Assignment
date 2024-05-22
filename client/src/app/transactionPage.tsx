@@ -1,7 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
 import {
   Table,
   TableBody,
@@ -23,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import BarChartStat from "./barChart";
 
 const TransactionPage = () => {
   interface Transaction {
@@ -37,18 +39,17 @@ const TransactionPage = () => {
   }
 
   interface Data {
-    transactions: Transaction[],
+    transactions: Transaction[];
     statistics: {
       totalSoldItems: number;
       totalNotSoldItems: number;
       totalSaleAmount: number;
-    },
-    barChart:{
+    };
+    barChart: {
       range: string;
       count: number;
-    }[]
+    }[];
   }
-  
 
   const monthData = [
     { name: "January", value: "01" },
@@ -64,16 +65,15 @@ const TransactionPage = () => {
     { name: "November", value: "11" },
     { name: "December", value: "12" },
   ];
- const [data, setData] = useState<Data | null>(null);
- const [TableData,setTableData]=useState<Transaction[] | null>(null);
+  const [data, setData] = useState<Data | null>(null);
+  const [TableData, setTableData] = useState<Transaction[] | null>(null);
   const [position, setPosition] = useState("03");
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [page, setPage]=useState(1);
+  const [page, setPage] = useState(1);
   const handleMonthfinder = () => {
-    const month = monthData.find(month => month.value === position);
+    const month = monthData.find((month) => month.value === position);
     return month?.name;
-  }
-
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,8 +83,7 @@ const TransactionPage = () => {
       setData(response.data);
     };
     fetchData();
-    console.log(data?.statistics,position);
-  }, [][position]);
+  }, [data?.statistics, position]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,37 +91,46 @@ const TransactionPage = () => {
         `http://localhost:5454/api/transactions?month=${position}&search=${searchInputValue}&page=${page}&perPage=10`
       );
       setTableData(response.data);
-    }
+    };
     fetchData();
-  },[searchInputValue,page,position]);
+  }, [searchInputValue, page, position]);
 
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="flex flex-col justify-center items-center w-[80vw]">
         <h1 className="text-2xl font-bold">Transactions</h1>
         <div className="flex flex-row justify-between w-[80vw] ">
-        <Input type="text" value={searchInputValue} onChange={(e) => setSearchInputValue(e.target.value)} placeholder="Search" className="w-[15vw]" />
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Select Month</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Select Month</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup
-                value={position}
-                onValueChange={setPosition}
-              >
-                {monthData.map((month) => (
-                  <DropdownMenuRadioItem value={month.value} key={month.value}>
-                    {month.name}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+          <Input
+            type="text"
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
+            placeholder="Search"
+            className="w-[15vw]"
+          />
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">Select Month</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Select Month</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup
+                  value={position}
+                  onValueChange={setPosition}
+                >
+                  {monthData.map((month) => (
+                    <DropdownMenuRadioItem
+                      value={month.value}
+                      key={month.value}
+                    >
+                      {month.name}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
         <Table>
           <TableHeader>
@@ -137,8 +145,8 @@ const TransactionPage = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-              {TableData &&
-            TableData?.map((transaction: Transaction) => (
+            {TableData &&
+              TableData?.map((transaction: Transaction) => (
                 <TableRow key={transaction.id}>
                   <TableCell className="">{transaction.id}</TableCell>
                   <TableCell>{transaction.title}</TableCell>
@@ -167,41 +175,53 @@ const TransactionPage = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              
           </TableBody>
         </Table>
         {TableData?.length === 0 && (
-                
-                <div className="text-center">No transactions found</div>
-                
-              )}
-        <div className="flex flex-row justify-between w-[80vw] "> 
-        <Button disabled={page<=1} onClick={()=>setPage(page-1)} variant="secondary">Previous</Button>
-        <p>Page {page}</p>
-        <Button onClick={()=>setPage(page+1)} variant="secondary">Next</Button>
+          <div className="text-center">No transactions found</div>
+        )}
+        <div className="flex flex-row justify-between w-[80vw] ">
+          <Button
+            disabled={page <= 1}
+            onClick={() => setPage(page - 1)}
+            variant="secondary"
+          >
+            Previous
+          </Button>
+          <p>Page {page}</p>
+          <Button onClick={() => setPage(page + 1)} variant="secondary">
+            Next
+          </Button>
         </div>
+
         {/* Card */}
-        <div className="mt-10">
-          
-          <h1 className="text-2xl font-bold">Statistics - {handleMonthfinder() || ''}</h1>
-          <div className="grid grid-cols-2 grid-rows-1 gap-2 p-10 rounded-lg dark:bg-slate-900 bg-slate-400 w-[30vw]">
-            <div className="grid grid-cols-1 grid-rows-3 gap-2 "> 
+        <div className="mt-10 flex flex-col justify-center items-center">
+          <h1 className="text-2xl font-bold mb-5">
+            Statistics - {handleMonthfinder() || ""}
+          </h1>
+          <div className="grid grid-cols-2 grid-rows-1 gap-2 p-10 rounded-lg dark:bg-slate-900 bg-slate-400 md:w-[30vw] w-[80%]">
+            <div className="grid grid-cols-1 grid-rows-3 gap-2 ">
               <div className="font-semibold">Total Sale</div>
               <div className="font-semibold">Total sold item</div>
               <div className="font-semibold">Total not sold item</div>
-             </div>
-            <div  className="grid grid-cols-1 grid-rows-3 gap-2">
-              <div>{data?.statistics.totalSaleAmount}</div>
+            </div>
+            <div className="grid grid-cols-1 grid-rows-3 gap-2">
+              <div>₹{data?.statistics.totalSaleAmount}</div>
               <div>{data?.statistics.totalSoldItems}</div>
               <div>{data?.statistics.totalNotSoldItems}</div>
             </div>
           </div>
         </div>
-
-        {/* Transactions Bar Char  */}
-          
+        {/* Bar Chart */}
+        <div className="mt-10 flex flex-col justify-center items-center">
+          <h1 className="text-2xl font-bold mb-5">
+            Bar Chart Stats - {handleMonthfinder() || ""}
+          </h1>
+          <div className=" w-[80vw] h-[50vh]">
+            <BarChartStat data={data?.barChart} />
+          </div>
+        </div>
       </div>
-
     </div>
   );
 };
