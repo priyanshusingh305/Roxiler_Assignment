@@ -32,7 +32,12 @@ async function listTransactionsService(queryItem) {
 
 async function getStatisticsService(month) {
   const totalSaleAmount = await Transaction.aggregate([
-    { $match: { $expr: { $eq: [{ $month: "$dateOfSale" }, Number(month)] } } },
+    {
+      $match: {
+        $expr: { $eq: [{ $month: "$dateOfSale" }, Number(month)] },
+        sold: true
+      },
+    },
     { $group: { _id: null, total: { $sum: "$price" } } },
   ]);
 
