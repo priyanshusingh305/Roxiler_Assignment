@@ -1,15 +1,13 @@
 const mongoose = require("mongoose");
 const axios = require("axios");
 const Transaction = require("./models/Transaction");
+require("dotenv").config();
 
 mongoose
-  .connect(
-    "mongodb+srv://singhpriyanshu305:RDYHHEW221DX25MV@cluster0.h9ch1pv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    {
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true
-    }
-  )
+  .connect(process.env.DB_URL, {
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true
+  })
   .then(() => {
     console.log("Connected to the database");
 

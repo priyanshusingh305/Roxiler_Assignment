@@ -1,17 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const transactionRoutes = require("./routes/transactions");
+const cors = require("cors");
+
+require("dotenv").config();
 
 const app = express();
 
-mongoose.connect(
-  "mongodb+srv://singhpriyanshu305:RDYHHEW221DX25MV@cluster0.h9ch1pv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-  {
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true
-  }
-);
+mongoose.connect(process.env.DB_URL, {
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true
+});
 
+app.use(cors());
 app.use(express.json());
 app.use("/api", transactionRoutes);
 
