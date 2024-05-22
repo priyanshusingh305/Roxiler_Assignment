@@ -8,6 +8,7 @@ const transactionSchema = new Schema({
   price: Number,
   dateOfSale: Date,
   category: String,
+  image: String,
   sold: Boolean,
 });
 
