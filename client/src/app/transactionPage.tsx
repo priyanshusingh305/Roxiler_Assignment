@@ -78,17 +78,17 @@ const TransactionPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `http://localhost:5454/api/combined-data?month=${position}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/combined-data?month=${position}`
       );
       setData(response.data);
     };
     fetchData();
-  }, [data?.statistics, position]);
+  }, [ position]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `http://localhost:5454/api/transactions?month=${position}&search=${searchInputValue}&page=${page}&perPage=10`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/transactions?month=${position}&search=${searchInputValue}&page=${page}&perPage=10`
       );
       setTableData(response.data);
     };
