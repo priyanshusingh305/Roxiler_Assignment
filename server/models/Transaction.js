@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const transactionSchema = new Schema({
@@ -8,7 +8,7 @@ const transactionSchema = new Schema({
   price: Number,
   dateOfSale: Date,
   category: String,
-  sold: Boolean
+  sold: Boolean,
 });
 
-module.exports = mongoose.model('Transaction', transactionSchema);
+module.exports = mongoose.model("Transaction", transactionSchema);
