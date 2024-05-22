@@ -12,12 +12,15 @@ async function listTransactionsService(queryItem) {
   }
 
   if (search) {
-    const searchNumber = Number(search);
+    const searchNumber = parseFloat(search);
     query.$or = [
       { title: new RegExp(search, "i") },
       { description: new RegExp(search, "i") },
       ...(isNaN(searchNumber) ? [] : [{ price: searchNumber }]),
     ];
+    if (!isNaN(searchNumber)) {
+      query.$or.push({ price: searchNumber });
+    }
   }
 
   const transactions = await Transaction.find(query)
