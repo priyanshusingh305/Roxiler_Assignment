@@ -206,7 +206,7 @@ const TransactionPage = () => {
               <div className="font-semibold">Total not sold item</div>
             </div>
             <div className="grid grid-cols-1 grid-rows-3 gap-2">
-              <div>₹{data?.statistics.totalSaleAmount}</div>
+              <div>₹{data?.statistics.totalSaleAmount.toFixed(2)}</div>
               <div>{data?.statistics.totalSoldItems}</div>
               <div>{data?.statistics.totalNotSoldItems}</div>
             </div>
