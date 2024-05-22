@@ -77,5 +77,3 @@ The server-side code is built using Express. It handles API requests from the cl
 - **PNPM**: Package manager for Node.js projects.
 
 ---
-
-Feel free to customize and expand upon this README to provide more detailed information about your project as needed!
