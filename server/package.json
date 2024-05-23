@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
-    "vercel-build": "nodemon server.js",
+    "vercel-build": "node server.js",
     "seed-db": "node dataSeed.js"
   },
   "author": "",
