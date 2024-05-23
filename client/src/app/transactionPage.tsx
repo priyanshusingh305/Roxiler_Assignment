@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import BarChartStat from "./barChart";
+import Loading from "./loading";
 
 const TransactionPage = () => {
   interface Transaction {
@@ -66,6 +67,7 @@ const TransactionPage = () => {
     { name: "December", value: "12" },
   ];
   const [data, setData] = useState<Data | null>(null);
+  const [loading, setLoading] = useState(true);
   const [TableData, setTableData] = useState<Transaction[] | null>(null);
   const [position, setPosition] = useState("03");
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -81,6 +83,7 @@ const TransactionPage = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/combined-data?month=${position}`
       );
       setData(response.data);
+      setLoading(false);
     };
     fetchData();
   }, [ position]);
@@ -91,12 +94,20 @@ const TransactionPage = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/transactions?month=${position}&search=${searchInputValue}&page=${page}&perPage=10`
       );
       setTableData(response.data);
+      setLoading(false);
     };
     fetchData();
   }, [searchInputValue, page, position]);
 
   return (
+    <>
+    { loading?(
+      <Loading/>
+    ):(
     <div className="flex flex-col justify-center items-center">
+      <h1 className="text-4xl font-bold mb-7 dark:text-gray-400">
+        Transaction Dashboard
+      </h1>
       <div className="flex flex-col justify-center items-center w-[80vw]">
         <h1 className="text-2xl font-bold">Transactions</h1>
         <div className="flex flex-row justify-between w-[80vw] ">
@@ -222,7 +233,9 @@ const TransactionPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div>)
+      }
+      </>
   );
 };
 
